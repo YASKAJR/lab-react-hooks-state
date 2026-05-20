@@ -6,29 +6,21 @@ function App() {
     { id: 1, name: "Milk", category: "Dairy" },
     { id: 2, name: "Bread", category: "Bakery" },
     { id: 3, name: "Cheese", category: "Dairy" },
-    { id: 4, name: "Apple", category: "Fruit" },
+    { id: 4, name: "Apple", category: "Fruits" },
   ];
 
-  // Dark mode state
   const [darkMode, setDarkMode] = useState(false);
-
-  // Category state
   const [selectedCategory, setSelectedCategory] = useState("All");
-
-  // Cart state
   const [cart, setCart] = useState([]);
 
-  // Toggle dark mode
-  function handleDarkMode() {
+  function handleToggle() {
     setDarkMode(!darkMode);
   }
 
-  // Add item to cart
   function handleAddToCart(product) {
     setCart([...cart, product]);
   }
 
-  // Filter products
   const filteredProducts =
     selectedCategory === "All"
       ? products
@@ -40,39 +32,45 @@ function App() {
     <div className={darkMode ? "dark" : "light"}>
       <h1>Shopping App</h1>
 
-      {/* Dark Mode Button */}
-      <button onClick={handleDarkMode}>
-        {darkMode ? "Light Mode" : "Dark Mode"}
+      {/* Toggle Button */}
+      <button onClick={handleToggle}>
+        Toggle {darkMode ? "Light" : "Dark"}
       </button>
 
-      {/* Category Filter */}
-      <div>
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          <option value="All">All</option>
-          <option value="Dairy">Dairy</option>
-          <option value="Bakery">Bakery</option>
-          <option value="Fruit">Fruit</option>
-        </select>
-      </div>
+      {/* Filter Dropdown */}
+      <select
+        value={selectedCategory}
+        onChange={(e) => setSelectedCategory(e.target.value)}
+      >
+        <option value="All">All</option>
+        <option value="Dairy">Dairy</option>
+        <option value="Bakery">Bakery</option>
+        <option value="Fruits">Fruits</option>
+        <option value="NonExistent">NonExistent</option>
+      </select>
 
       {/* Product List */}
       <ul>
-        {filteredProducts.map((product) => (
-          <li key={product.id}>
-            {product.name}
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <li key={product.id}>
+              {product.name}
 
-            <button onClick={() => handleAddToCart(product)}>
-              Add to Cart
-            </button>
-          </li>
-        ))}
+              <button
+                data-testid={`product-${product.id}`}
+                onClick={() => handleAddToCart(product)}
+              >
+                Add to Cart
+              </button>
+            </li>
+          ))
+        ) : (
+          <p>No products available</p>
+        )}
       </ul>
 
       {/* Cart */}
-      <h2>Cart</h2>
+      <h2>Shopping Cart</h2>
 
       {cart.map((item, index) => (
         <p key={index}>{item.name} is in your cart.</p>
@@ -81,4 +79,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;;
